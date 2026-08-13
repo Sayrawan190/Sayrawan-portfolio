@@ -29,15 +29,22 @@ function FeaturedProject({ project, lang, variants }) {
   const linkProps = isLink ? { href: project.link, target: "_blank", rel: "noopener noreferrer" } : {};
 
   return (
-    <Tag className="projectFeatured" variants={variants} {...linkProps} aria-label={isLink ? L(project.name, lang) : undefined}>
-      <div className="projectFeatured__media">
-        <div className="projectFeatured__browserBar" aria-hidden="true">
-          <span className="projectFeatured__dot"></span>
-          <span className="projectFeatured__dot"></span>
-          <span className="projectFeatured__dot"></span>
+    <Tag
+      className={`projectFeatured${project.image ? "" : " projectFeatured--noMedia"}`}
+      variants={variants}
+      {...linkProps}
+      aria-label={isLink ? L(project.name, lang) : undefined}
+    >
+      {project.image && (
+        <div className="projectFeatured__media">
+          <div className="projectFeatured__browserBar" aria-hidden="true">
+            <span className="projectFeatured__dot"></span>
+            <span className="projectFeatured__dot"></span>
+            <span className="projectFeatured__dot"></span>
+          </div>
+          <img src={project.image} alt={L(project.name, lang)} loading="lazy" />
         </div>
-        {project.image && <img src={project.image} alt={L(project.name, lang)} loading="lazy" />}
-      </div>
+      )}
       <div className="projectFeatured__body">
         <p className="projectFeatured__eyebrow">
           Featured{L(project.badge, lang) ? ` · ${L(project.badge, lang)}` : ""}

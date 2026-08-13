@@ -14,6 +14,8 @@ export default function ProfileEditor() {
   const { showToast } = useToast();
   const [form, setForm] = useState(data.profile);
   const [confirmReset, setConfirmReset] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [resetting, setResetting] = useState(false);
   const [pwForm, setPwForm] = useState({ current: "", next: "", confirm: "" });
   const [pwError, setPwError] = useState("");
   const [pwBusy, setPwBusy] = useState(false);
@@ -50,17 +52,31 @@ export default function ProfileEditor() {
     set("roleWords", (form.roleWords || []).filter((_, i) => i !== index));
   }
 
-  function handleSave(e) {
+  async function handleSave(e) {
     e.preventDefault();
-    updateProfile(form);
-    showToast(t.dash_saved);
+    setSaving(true);
+    try {
+      await updateProfile(form);
+      showToast(t.dash_saved);
+    } catch {
+      showToast(t.dash_save_error, "danger");
+    } finally {
+      setSaving(false);
+    }
   }
 
-  function handleReset() {
-    resetToDefaults();
-    setForm(data.profile);
-    setConfirmReset(false);
-    showToast(t.dash_saved);
+  async function handleReset() {
+    setResetting(true);
+    try {
+      await resetToDefaults();
+      setForm(data.profile);
+      showToast(t.dash_saved);
+    } catch {
+      showToast(t.dash_save_error, "danger");
+    } finally {
+      setResetting(false);
+      setConfirmReset(false);
+    }
   }
 
   async function handleChangePassword() {
@@ -100,7 +116,7 @@ export default function ProfileEditor() {
           <h1>{t.dash_tab_profile}</h1>
           <p>{t.dash_title}</p>
         </div>
-        <button className="btn btn--primary" type="submit">{t.dash_save}</button>
+        <button className="btn btn--primary" type="submit" disabled={saving}>{saving ? t.dash_saving : t.dash_save}</button>
       </div>
 
       <section className="dashSection">
@@ -212,14 +228,14 @@ export default function ProfileEditor() {
       </section>
 
       <div className="formActions" style={{ justifyContent: "flex-start", marginBottom: 30 }}>
-        <button className="btn btn--primary" type="submit">{t.dash_save}</button>
+        <button className="btn btn--primary" type="submit" disabled={saving}>{saving ? t.dash_saving : t.dash_save}</button>
       </div>
 
       <section className="dangerZone">
         <h3>{t.dash_reset_title}</h3>
         <p>{t.dash_reset_body}</p>
-        <button type="button" className="btn btn--danger" onClick={() => setConfirmReset(true)}>
-          {t.dash_reset_btn}
+        <button type="button" className="btn btn--danger" disabled={resetting} onClick={() => setConfirmReset(true)}>
+          {resetting ? t.dash_saving : t.dash_reset_btn}
         </button>
       </section>
 

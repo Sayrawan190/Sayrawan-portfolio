@@ -131,9 +131,23 @@ export default function SkillsEditor() {
   const { showToast } = useToast();
   const categories = data.skillCategories || [];
 
+  // Every one of these hits the API and must be awaited before declaring
+  // success — firing the request and immediately toasting "saved" (the
+  // previous pattern here and in every other editor) meant a failed request
+  // still told the user it worked.
+  async function runOrToastError(action) {
+    try {
+      await action();
+      showToast(t.dash_saved);
+    } catch {
+      showToast(t.dash_save_error, "danger");
+    }
+  }
+
   function addCategory() {
-    addItem("skillCategories", { icon: "✨", name: { en: "New Category", ar: "فئة جديدة" }, skills: [] }, "cat");
-    showToast(t.dash_saved);
+    runOrToastError(() =>
+      addItem("skillCategories", { icon: "✨", name: { en: "New Category", ar: "فئة جديدة" }, skills: [] }, "cat")
+    );
   }
 
   return (
@@ -154,11 +168,11 @@ export default function SkillsEditor() {
             key={cat.id}
             category={cat}
             t={t}
-            onUpdateCategory={(patch) => { updateItem("skillCategories", cat.id, patch); showToast(t.dash_saved); }}
-            onDeleteCategory={() => { deleteItem("skillCategories", cat.id); showToast(t.dash_saved); }}
-            onAddSkill={(skill) => { addSkillToCategory(cat.id, skill); showToast(t.dash_saved); }}
-            onUpdateSkill={(skillId, patch) => { updateSkillInCategory(cat.id, skillId, patch); showToast(t.dash_saved); }}
-            onDeleteSkill={(skillId) => { deleteSkillFromCategory(cat.id, skillId); showToast(t.dash_saved); }}
+            onUpdateCategory={(patch) => runOrToastError(() => updateItem("skillCategories", cat.id, patch))}
+            onDeleteCategory={() => runOrToastError(() => deleteItem("skillCategories", cat.id))}
+            onAddSkill={(skill) => runOrToastError(() => addSkillToCategory(cat.id, skill))}
+            onUpdateSkill={(skillId, patch) => runOrToastError(() => updateSkillInCategory(cat.id, skillId, patch))}
+            onDeleteSkill={(skillId) => runOrToastError(() => deleteSkillFromCategory(cat.id, skillId))}
           />
         ))
       )}

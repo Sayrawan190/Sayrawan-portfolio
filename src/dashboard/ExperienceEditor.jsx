@@ -18,7 +18,7 @@ const BLANK = {
   technologies: [],
 };
 
-function ExperienceForm({ initial, t, onSave, onClose }) {
+function ExperienceForm({ initial, t, saving, onSave, onClose }) {
   const [form, setForm] = useState(initial || BLANK);
   const [techText, setTechText] = useState((initial?.technologies || []).join(", "));
 
@@ -66,8 +66,8 @@ function ExperienceForm({ initial, t, onSave, onClose }) {
         <input type="text" value={techText} onChange={(e) => setTechText(e.target.value)} placeholder="Excel, Java" />
       </div>
       <div className="formActions">
-        <button type="button" className="btn btn--ghost" onClick={onClose}>{t.dash_cancel}</button>
-        <button type="submit" className="btn btn--primary">{t.dash_save}</button>
+        <button type="button" className="btn btn--ghost" onClick={onClose} disabled={saving}>{t.dash_cancel}</button>
+        <button type="submit" className="btn btn--primary" disabled={saving}>{saving ? t.dash_saving : t.dash_save}</button>
       </div>
     </form>
   );
@@ -80,16 +80,35 @@ export default function ExperienceEditor() {
   const { showToast } = useToast();
   const [editing, setEditing] = useState(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+  const [saving, setSaving] = useState(false);
   const experience = data.experience || [];
 
-  function handleSave(values) {
-    if (editing === "new") {
-      addItem("experience", values, "exp");
-    } else {
-      updateItem("experience", editing.id, values);
+  async function handleSave(values) {
+    setSaving(true);
+    try {
+      if (editing === "new") {
+        await addItem("experience", values, "exp");
+      } else {
+        await updateItem("experience", editing.id, values);
+      }
+      setEditing(null);
+      showToast(t.dash_saved);
+    } catch {
+      showToast(t.dash_save_error, "danger");
+    } finally {
+      setSaving(false);
     }
-    setEditing(null);
-    showToast(t.dash_saved);
+  }
+
+  async function handleConfirmDelete() {
+    try {
+      await deleteItem("experience", confirmDeleteId);
+      showToast(t.dash_saved);
+    } catch {
+      showToast(t.dash_save_error, "danger");
+    } finally {
+      setConfirmDeleteId(null);
+    }
   }
 
   return (
@@ -128,11 +147,12 @@ export default function ExperienceEditor() {
         </div>
       )}
 
-      <FormModal open={!!editing} title={editing === "new" ? t.dash_add : t.dash_edit} onClose={() => setEditing(null)} wide>
+      <FormModal open={!!editing} title={editing === "new" ? t.dash_add : t.dash_edit} onClose={() => (saving ? null : setEditing(null))} wide>
         {editing && (
           <ExperienceForm
             initial={editing === "new" ? null : editing}
             t={t}
+            saving={saving}
             onSave={handleSave}
             onClose={() => setEditing(null)}
           />
@@ -145,7 +165,7 @@ export default function ExperienceEditor() {
         body={t.dash_confirm_delete_body}
         confirmLabel={t.dash_confirm}
         cancelLabel={t.dash_cancel}
-        onConfirm={() => { deleteItem("experience", confirmDeleteId); setConfirmDeleteId(null); showToast(t.dash_saved); }}
+        onConfirm={handleConfirmDelete}
         onCancel={() => setConfirmDeleteId(null)}
       />
     </div>
