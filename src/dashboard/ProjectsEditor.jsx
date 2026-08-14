@@ -4,7 +4,7 @@ import { useT } from "../data/uiText";
 import { useData } from "../context/DataContext";
 import { useToast } from "../context/ToastContext";
 import LocalizedField from "./components/LocalizedField";
-import ImageInput from "./components/ImageInput";
+import MultiImageInput from "./components/MultiImageInput";
 import FormModal from "./components/FormModal";
 import ConfirmDialog from "./components/ConfirmDialog";
 import { L, emptyLocalized } from "../utils/field";
@@ -14,7 +14,7 @@ const BLANK = {
   description: emptyLocalized(),
   badge: emptyLocalized(),
   technologies: [],
-  image: "",
+  images: [],
   link: "",
 };
 
@@ -41,7 +41,14 @@ function ProjectForm({ initial, t, saving, onSave, onClose }) {
         <label>{t.dash_technologies}</label>
         <input type="text" value={techText} onChange={(e) => setTechText(e.target.value)} placeholder="HTML, CSS, JavaScript" />
       </div>
-      <ImageInput label={t.dash_image} value={form.image} onChange={(v) => set("image", v)} />
+      <MultiImageInput
+        label={t.dash_images}
+        value={form.images}
+        onChange={(v) => set("images", v)}
+        max={5}
+        hint={t.dash_images_hint}
+        addLabel={t.dash_add}
+      />
       <div className="field">
         <label>{t.dash_link}</label>
         <input type="url" value={form.link} onChange={(e) => set("link", e.target.value)} placeholder="https://..." />
@@ -109,8 +116,8 @@ export default function ProjectsEditor() {
           {projects.map((p) => (
             <div className="dashRow" key={p.id}>
               <div className="dashRow__main">
-                {p.image ? (
-                  <img className="dashRow__thumb" src={p.image} alt="" />
+                {p.images?.[0] ? (
+                  <img className="dashRow__thumb" src={p.images[0]} alt="" />
                 ) : (
                   <div className="dashRow__icon">💼</div>
                 )}

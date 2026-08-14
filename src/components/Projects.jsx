@@ -4,6 +4,7 @@ import { useT } from "../data/uiText";
 import { useData } from "../context/DataContext";
 import { L } from "../utils/field";
 import { fadeUp, staggerParent, viewportOnce } from "../utils/motion";
+import ProjectFolder from "./ProjectFolder";
 
 function ArrowIcon() {
   return (
@@ -16,41 +17,30 @@ function ArrowIcon() {
 function ProjectAction({ project }) {
   if (!project.link) return null;
   return (
-    <span className="projectCard__action">
+    <a className="projectCard__action" href={project.link} target="_blank" rel="noopener noreferrer">
       <span>View project</span>
       <span className="projectCard__actionArrow"><ArrowIcon /></span>
-    </span>
+    </a>
   );
 }
 
-function FeaturedProject({ project, lang, variants }) {
-  const isLink = Boolean(project.link);
-  const Tag = isLink ? motion.a : motion.div;
-  const linkProps = isLink ? { href: project.link, target: "_blank", rel: "noopener noreferrer" } : {};
+function ProjectRow({ project, lang, t, variants }) {
+  const images = project.images || [];
+  const title = L(project.name, lang);
 
   return (
-    <Tag
-      className={`projectFeatured${project.image ? "" : " projectFeatured--noMedia"}`}
-      variants={variants}
-      {...linkProps}
-      aria-label={isLink ? L(project.name, lang) : undefined}
-    >
-      {project.image && (
-        <div className="projectFeatured__media">
-          <div className="projectFeatured__browserBar" aria-hidden="true">
-            <span className="projectFeatured__dot"></span>
-            <span className="projectFeatured__dot"></span>
-            <span className="projectFeatured__dot"></span>
-          </div>
-          <img src={project.image} alt={L(project.name, lang)} loading="lazy" />
+    <motion.article className={`projectRow${images.length === 0 ? " projectRow--noMedia" : ""}`} variants={variants}>
+      {images.length > 0 && (
+        <div className="projectRow__media">
+          <ProjectFolder images={images} title={title} t={t} />
         </div>
       )}
-      <div className="projectFeatured__body">
-        <p className="projectFeatured__eyebrow">
-          Featured{L(project.badge, lang) ? ` · ${L(project.badge, lang)}` : ""}
-        </p>
-        <h3 className="projectFeatured__title">{L(project.name, lang)}</h3>
-        <p className="projectFeatured__desc">{L(project.description, lang)}</p>
+      <div className="projectRow__content">
+        <header className="projectCard__head">
+          <h3 className="projectCard__title">{title}</h3>
+          {L(project.badge, lang) && <span className="projectCard__badge">{L(project.badge, lang)}</span>}
+        </header>
+        <p className="projectCard__desc">{L(project.description, lang)}</p>
         {Array.isArray(project.technologies) && project.technologies.length > 0 && (
           <ul className="projectCard__tags" aria-label="Project tags">
             {project.technologies.map((tech, i) => (
@@ -58,56 +48,8 @@ function FeaturedProject({ project, lang, variants }) {
             ))}
           </ul>
         )}
-        <div className="projectFeatured__actions">
-          <ProjectAction project={project} />
-        </div>
+        <ProjectAction project={project} />
       </div>
-    </Tag>
-  );
-}
-
-function ProjectCard({ project, lang, variants }) {
-  const content = (
-    <>
-      {project.image && (
-        <div className="projectCard__imageWrap">
-          <img className="projectCard__image" src={project.image} alt={L(project.name, lang)} loading="lazy" />
-        </div>
-      )}
-      <header className="projectCard__head">
-        <h3 className="projectCard__title">{L(project.name, lang)}</h3>
-        {L(project.badge, lang) && <span className="projectCard__badge">{L(project.badge, lang)}</span>}
-      </header>
-      <p className="projectCard__desc">{L(project.description, lang)}</p>
-      {Array.isArray(project.technologies) && project.technologies.length > 0 && (
-        <ul className="projectCard__tags" aria-label="Project tags">
-          {project.technologies.map((tech, i) => (
-            <li className="tag" key={i}>{tech}</li>
-          ))}
-        </ul>
-      )}
-      <ProjectAction project={project} />
-    </>
-  );
-
-  if (project.link) {
-    return (
-      <motion.a
-        className="projectCard"
-        href={project.link}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={L(project.name, lang)}
-        variants={variants}
-      >
-        {content}
-      </motion.a>
-    );
-  }
-
-  return (
-    <motion.article className="projectCard" variants={variants}>
-      {content}
     </motion.article>
   );
 }
@@ -120,10 +62,7 @@ export default function Projects() {
   const reduced = useReducedMotion();
 
   const container = staggerParent(reduced, { stagger: 0.1 });
-  const featuredVariants = fadeUp(reduced, { y: 26 });
-  const cardVariants = fadeUp(reduced, { y: 20 });
-
-  const [featured, ...rest] = projects;
+  const rowVariants = fadeUp(reduced, { y: 20 });
 
   return (
     <section className="section" id="projects" aria-label="Projects">
@@ -142,20 +81,15 @@ export default function Projects() {
           <div className="emptyState">{t.empty_projects}</div>
         ) : (
           <motion.div
-            className="projectsLayout"
+            className="projectsList"
             variants={container}
             initial="hidden"
             whileInView="show"
             viewport={viewportOnce}
           >
-            {featured && <FeaturedProject project={featured} lang={lang} variants={featuredVariants} />}
-            {rest.length > 0 && (
-              <div className="projectsGrid">
-                {rest.map((p) => (
-                  <ProjectCard key={p.id} project={p} lang={lang} variants={cardVariants} />
-                ))}
-              </div>
-            )}
+            {projects.map((p) => (
+              <ProjectRow key={p.id} project={p} lang={lang} t={t} variants={rowVariants} />
+            ))}
           </motion.div>
         )}
       </div>

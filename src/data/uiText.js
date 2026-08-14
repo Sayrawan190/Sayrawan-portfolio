@@ -64,6 +64,11 @@ export const UI = {
 
     footer_text: "©",
 
+    folder_open: "Open photos",
+    folder_close: "Close photos",
+    folder_prev: "Previous photo",
+    folder_next: "Next photo",
+
     empty_skills: "No skills added yet. Add some from the dashboard.",
     empty_projects: "No projects added yet. Add some from the dashboard.",
     empty_experience: "No experience added yet. Add some from the dashboard.",
@@ -105,6 +110,8 @@ export const UI = {
     dash_technologies: "Technologies (comma separated)",
     dash_image: "Image URL",
     dash_upload_image: "Or upload an image",
+    dash_images: "Project photos",
+    dash_images_hint: "Up to 5 photos. Shown as a folder visitors click to open on the site.",
     dash_link: "Link",
     dash_badge: "Badge label",
     dash_organization: "Organization / Company",
@@ -225,6 +232,11 @@ export const UI = {
 
     footer_text: "©",
 
+    folder_open: "فتح الصور",
+    folder_close: "إغلاق الصور",
+    folder_prev: "الصورة السابقة",
+    folder_next: "الصورة التالية",
+
     empty_skills: "لا توجد مهارات مضافة بعد. أضف بعضها من لوحة التحكم.",
     empty_projects: "لا توجد مشاريع مضافة بعد. أضف بعضها من لوحة التحكم.",
     empty_experience: "لا توجد خبرات مضافة بعد. أضف بعضها من لوحة التحكم.",
@@ -265,6 +277,8 @@ export const UI = {
     dash_technologies: "التقنيات (مفصولة بفواصل)",
     dash_image: "رابط الصورة",
     dash_upload_image: "أو ارفع صورة",
+    dash_images: "صور المشروع",
+    dash_images_hint: "حتى 5 صور. تظهر للزوار كملف مغلق يفتحونه بالضغط عليه.",
     dash_link: "الرابط",
     dash_badge: "تصنيف مختصر",
     dash_organization: "المؤسسة / الشركة",

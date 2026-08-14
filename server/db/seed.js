@@ -73,9 +73,9 @@ export async function seedDatabase(client) {
     for (let i = 0; i < SEED_PROJECTS.length; i++) {
       const row = LIST_CONFIG.projects.toRow(SEED_PROJECTS[i]);
       await client.query(
-        `INSERT INTO projects (id, position, name_en, name_ar, description_en, description_ar, badge_en, badge_ar, technologies, image, link)
+        `INSERT INTO projects (id, position, name_en, name_ar, description_en, description_ar, badge_en, badge_ar, technologies, images, link)
          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,
-        [makeId("proj"), i, row.name_en, row.name_ar, row.description_en, row.description_ar, row.badge_en, row.badge_ar, row.technologies, row.image, row.link]
+        [makeId("proj"), i, row.name_en, row.name_ar, row.description_en, row.description_ar, row.badge_en, row.badge_ar, row.technologies, row.images, row.link]
       );
     }
 

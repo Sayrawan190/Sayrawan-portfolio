@@ -85,7 +85,7 @@ export const SEED_PROJECTS = [
     },
     badge: { en: "Personal", ar: "شخصي" },
     technologies: ["Linux", "Networking", "Self-hosting"],
-    image: "",
+    images: [],
     link: "",
   },
   {
@@ -96,7 +96,7 @@ export const SEED_PROJECTS = [
     },
     badge: { en: "Front-end", ar: "فرونت-إند" },
     technologies: ["HTML", "CSS", "JavaScript"],
-    image: "",
+    images: [],
     link: "",
   },
   {
@@ -107,7 +107,7 @@ export const SEED_PROJECTS = [
     },
     badge: { en: "Tools", ar: "أدوات" },
     technologies: ["Excel", "Reporting", "Tracking"],
-    image: "",
+    images: [],
     link: "",
   },
 ];

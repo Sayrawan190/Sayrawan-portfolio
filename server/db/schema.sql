@@ -53,8 +53,13 @@ CREATE TABLE IF NOT EXISTS projects (
   description_en text NOT NULL DEFAULT '', description_ar text NOT NULL DEFAULT '',
   badge_en text NOT NULL DEFAULT '', badge_ar text NOT NULL DEFAULT '',
   technologies text[] NOT NULL DEFAULT '{}',
-  image text NOT NULL DEFAULT '', link text NOT NULL DEFAULT ''
+  image text NOT NULL DEFAULT '',
+  images text[] NOT NULL DEFAULT '{}',
+  link text NOT NULL DEFAULT ''
 );
+-- Adds the multi-image gallery column to a projects table that already
+-- existed before it (CREATE TABLE IF NOT EXISTS above is a no-op there).
+ALTER TABLE projects ADD COLUMN IF NOT EXISTS images text[] NOT NULL DEFAULT '{}';
 
 CREATE TABLE IF NOT EXISTS experience (
   id text PRIMARY KEY,

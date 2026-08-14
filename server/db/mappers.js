@@ -34,7 +34,7 @@ export const LIST_CONFIG = {
       badge_en: item.badge?.en ?? "",
       badge_ar: item.badge?.ar ?? "",
       technologies: item.technologies ?? [],
-      image: item.image ?? "",
+      images: (item.images ?? []).filter(Boolean).slice(0, 5),
       link: item.link ?? "",
     }),
     fromRow: (row) => ({
@@ -43,7 +43,9 @@ export const LIST_CONFIG = {
       description: { en: row.description_en, ar: row.description_ar },
       badge: { en: row.badge_en, ar: row.badge_ar },
       technologies: row.technologies ?? [],
-      image: row.image,
+      // Falls back to the legacy single `image` column for rows saved before
+      // the multi-image gallery existed.
+      images: row.images?.length ? row.images : row.image ? [row.image] : [],
       link: row.link,
     }),
   },

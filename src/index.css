@@ -698,64 +698,25 @@ button{ font: inherit; }
 }
 
 /* PROJECTS */
-.projectsLayout{ display:flex; flex-direction:column; gap: 14px; }
-.projectsGrid{ display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; }
+.projectsList{ display:flex; flex-direction:column; gap: 14px; margin-top: 84px; }
 
-.projectFeatured{
-  display:grid;
-  grid-template-columns: 1.1fr .9fr;
+.projectRow{
+  display:flex;
+  direction: ltr;
+  align-items: stretch;
+  gap: 22px;
   border-radius: var(--radius-xl);
   border: 1px solid rgba(255,255,255,.12);
   background: rgba(255,255,255,.05);
-  overflow: hidden;
+  padding: 18px;
   box-shadow: var(--shadow-card);
   transition: border-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
 }
-.projectFeatured:hover{ border-color: rgba(var(--accent-rgb), .3); box-shadow: var(--shadow-card-hover); }
-.projectFeatured--noMedia{ grid-template-columns: 1fr; }
-.projectFeatured__media{
-  position: relative;
-  overflow: hidden;
-  min-height: 260px;
-  background: linear-gradient(160deg, rgba(var(--accent-rgb),.16), rgba(var(--accent2-rgb),.08));
-}
-.projectFeatured__media img{
-  width: 100%; height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform .6s var(--ease-out);
-}
-.projectFeatured:hover .projectFeatured__media img{ transform: scale(1.06); }
-.projectFeatured__browserBar{
-  position: absolute; top:0; left:0; right:0;
-  display:flex; align-items:center; gap: 6px;
-  padding: 10px 12px;
-  background: rgba(10,12,18,.5);
-  backdrop-filter: blur(6px);
-}
-.projectFeatured__dot{ width:7px; height:7px; border-radius:999px; background: rgba(255,255,255,.28); }
-.projectFeatured__body{ padding: 28px; display:flex; flex-direction:column; }
-.projectFeatured__eyebrow{
-  margin: 0 0 8px;
-  font-size: var(--text-2xs);
-  text-transform: uppercase;
-  letter-spacing: .1em;
-  color: var(--accent2);
-}
-.projectFeatured__title{ margin: 0 0 10px; font-size: var(--text-xl); }
-.projectFeatured__desc{ margin: 0 0 18px; color: var(--muted); font-size: var(--text-base); flex: 1; }
-.projectFeatured__actions{ display:flex; gap: 10px; flex-wrap: wrap; }
+.projectRow:hover{ border-color: rgba(var(--accent-rgb), .3); box-shadow: var(--shadow-card-hover); }
+.projectRow--noMedia{ padding: 18px 20px; }
+.projectRow__media{ flex: 0 0 auto; display:flex; align-items:center; justify-content:center; }
+.projectRow__content{ flex: 1 1 auto; min-width: 0; display:flex; flex-direction:column; justify-content:center; position: relative; z-index: 2; }
 
-.projectCard{
-  display:flex;
-  flex-direction: column;
-  border-radius: var(--radius-xl);
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.05);
-  padding: 16px;
-  min-height: 170px;
-  box-shadow: var(--shadow-card);
-}
 .projectCard__head{
   display:flex;
   align-items:flex-start;
@@ -798,10 +759,11 @@ a.projectCard:hover .projectCard__title, .projectCard:hover .projectCard__title{
   background: rgba(255,255,255,.04);
 }
 
-.projectCard__actions, .projectFeatured__actions{ display:flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
 .projectCard__action{
   display:inline-flex;
+  align-self: flex-start;
   align-items:center;
+  margin-top: 12px;
   gap: 6px;
   font-size: var(--text-xs);
   color: var(--muted);
@@ -1064,6 +1026,9 @@ html[dir="rtl"] .contactItem__copied{ right: auto; left: 10px; }
 .modal__panel{
   position: relative;
   width: min(900px, calc(100% - 26px));
+  max-height: calc(100vh - 48px);
+  display: flex;
+  flex-direction: column;
   border-radius: var(--radius-xl);
   border: 1px solid rgba(255,255,255,.14);
   background: rgba(14,18,26,.88);
@@ -1084,12 +1049,17 @@ html[dir="rtl"] .contactItem__copied{ right: auto; left: 10px; }
   gap: 12px;
   padding: 14px 14px 10px;
   border-bottom: 1px solid rgba(255,255,255,.08);
+  flex: 0 0 auto;
 }
 .modal__title{
   margin: 0;
   font-size: var(--text-lg);
 }
-.modal__content{ padding: 14px; }
+/* Tall forms (many fields, a full photo grid) must never rely on the
+   browser's own zoom to become reachable — the panel caps its height to the
+   viewport and only this inner area scrolls, so the head/close button stay
+   put and everything below is always reachable. */
+.modal__content{ padding: 14px; overflow-y: auto; flex: 1 1 auto; min-height: 0; }
 .modal__meta{
   margin: 0 0 12px;
   color: var(--muted);
@@ -1130,23 +1100,29 @@ html[dir="rtl"] .statusCard__list{ padding-right: 18px; padding-left: 0; }
 html[dir="rtl"] .sectionHead{ align-items:flex-start; }
 html[dir="rtl"] .nav__links{ gap: 8px; }
 html[dir="rtl"] .hero__cta{ justify-content: flex-start; }
-html[dir="rtl"] .projectFeatured{ direction: rtl; }
+/* .projectRow deliberately keeps the folder on the left / content on the
+   right in both languages — flex "row" is direction-aware and would
+   otherwise mirror it in RTL like everything else on the page, so the
+   ordering is pinned to ltr and RTL text behavior is reinstated just for
+   the content side. */
+html[dir="rtl"] .projectRow__content{ direction: rtl; }
 
 /* RESPONSIVE */
 @media (max-width: 980px){
   .hero__grid{ grid-template-columns: 1fr; }
   .hero__media{ order: -1; }
-  .projectsGrid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
-  .projectFeatured{ grid-template-columns: 1fr; }
-  .projectFeatured__media{ min-height: 220px; }
   .contactGrid{ grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
 }
 @media (max-width: 720px){
   .section{ padding: 56px 0; }
   .sectionHead{ flex-direction: column; align-items:flex-start; }
   .skillsGrid{ grid-template-columns: 1fr; }
-  .projectsGrid{ grid-template-columns: 1fr; }
   .certChip{ width: 220px; }
+
+  .projectRow{ flex-direction: column; align-items: center; text-align: center; }
+  .projectRow__content{ align-items: center; }
+  .projectRow .projectCard__head{ flex-direction: column; align-items: center; }
+  .projectRow .projectCard__tags{ justify-content: center; }
 
   .nav__toggle{ display: inline-flex; align-items:center; justify-content:center; }
   .nav__links{
@@ -1188,17 +1164,193 @@ html[dir="rtl"] .projectFeatured{ direction: rtl; }
   text-align: center;
 }
 
-.projectCard{ display: block; text-decoration: none; overflow: hidden; }
-.projectCard__imageWrap{ overflow: hidden; border-radius: var(--radius-sm); margin-bottom: 12px; }
-.projectCard__image{
+/* ---- Project folder gallery ----
+   All animation runs on click (an `is-open` class), not hover — the folder
+   stays open until clicked again so it works the same on touch as desktop. */
+.projFolder{
+  --projFolder-w: 192px;
+  --projFolder-h: 152px;
+  width: var(--projFolder-w);
+  height: var(--projFolder-h);
+  flex: 0 0 auto;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  outline-offset: 4px;
+}
+.projFolder__stage{
+  position: relative;
   width: 100%;
-  aspect-ratio: 16/9;
+  height: 100%;
+  perspective: 1200px;
+}
+.projFolder__back{
+  --projFolder-backGradient: linear-gradient(160deg, rgba(var(--accent-rgb),.6), rgba(var(--accent2-rgb),.42));
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-md);
+  background: var(--projFolder-backGradient);
+  box-shadow: var(--shadow-card);
+}
+/* `background: inherit` looked mismatched here — the gradient repainted
+   fresh inside the tab's own tiny box instead of continuing the one behind
+   it. Sizing the same gradient to the full back panel and shifting its
+   position by the tab's own offset makes the tab a window into the exact
+   same surface, so the color lines up seamlessly at the seam. */
+.projFolder__tab{
+  position: absolute;
+  top: -8px;
+  left: 14px;
+  width: 52px;
+  height: 15px;
+  border-radius: 8px 8px 0 0;
+  background-image: var(--projFolder-backGradient);
+  background-size: var(--projFolder-w) var(--projFolder-h);
+  background-position: -14px 8px;
+}
+/* The front stays put and visible — it's the "face" of the open folder —
+   photos live behind it and pop up from behind its top edge, fanned at
+   alternating angles, each one clear of the others (not a tight stack). */
+.projFolder__files{
+  position: absolute;
+  inset: 0;
+}
+.projFolder__file{
+  position: absolute;
+  left: 20%;
+  top: 22px;
+  width: 62%;
+  height: 58%;
+  border: 0;
+  padding: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(255,255,255,.08);
+  box-shadow: 0 8px 18px rgba(0,0,0,.4);
+  cursor: default;
+  transition: transform .5s cubic-bezier(.22,1,.36,1);
+  z-index: calc(20 - var(--i));
+}
+.projFolder__file img{
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   display: block;
-  border: 1px solid rgba(255,255,255,.10);
-  transition: transform .5s var(--ease-out);
 }
-.projectCard:hover .projectCard__image{ transform: scale(1.05); }
+.projFolder.is-open .projFolder__file{ cursor: pointer; }
+.projFolder.is-open .projFolder__file:hover,
+.projFolder.is-open .projFolder__file:focus-visible{ filter: brightness(1.1); }
+.projFolder.is-open .projFolder__file:nth-child(1){ transform: translate(-14px, -42px) rotate(-24deg); }
+.projFolder.is-open .projFolder__file:nth-child(2){ transform: translate(16px, -70px) rotate(13deg); }
+.projFolder.is-open .projFolder__file:nth-child(3){ transform: translate(-18px, -96px) rotate(-16deg); }
+.projFolder.is-open .projFolder__file:nth-child(4){ transform: translate(14px, -108px) rotate(10deg); }
+.projFolder.is-open .projFolder__file:nth-child(5){ transform: translate(-12px, -128px) rotate(-8deg); }
+.projFolder__front{
+  position: absolute;
+  top: 16px;
+  left: 0; right: 0; bottom: 0;
+  border-radius: var(--radius-md);
+  background: linear-gradient(160deg, var(--accent), var(--accent2));
+  box-shadow: var(--shadow-card), inset 0 1px 0 rgba(255,255,255,.4);
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.projFolder__icon{
+  position: relative;
+  width: 38px;
+  height: 30px;
+  opacity: .5;
+  transition: opacity .2s ease;
+}
+.projFolder__icon::before, .projFolder__icon::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 2px solid #fff;
+  border-radius: 5px;
+}
+.projFolder__icon::before{ transform: rotate(-9deg) translate(-3px, 2px); }
+.projFolder__icon::after{ transform: rotate(7deg) translate(3px, -1px); }
+.projFolder.is-open .projFolder__icon{ opacity: 0; }
+.projFolder__counter{
+  position: absolute;
+  z-index: 40;
+  top: -14px;
+  right: -6px;
+  display:flex;
+  align-items:center;
+  gap: 6px;
+  padding: 4px 9px;
+  border-radius: var(--radius-pill);
+  background: rgba(14,18,26,.9);
+  border: 1px solid rgba(255,255,255,.16);
+  box-shadow: var(--shadow-card);
+  font-size: var(--text-2xs);
+  font-weight: 700;
+  color: var(--text);
+  opacity: 0;
+  transform: scale(.7) translateY(6px);
+  transition: all .35s cubic-bezier(.34,1.56,.64,1);
+}
+.projFolder.is-open .projFolder__counter{ opacity: 1; transform: scale(1) translateY(0); transition-delay: .15s; }
+.projFolder__counterDot{ width:6px; height:6px; border-radius:999px; background: var(--success); box-shadow: 0 0 8px var(--success); }
+.projFolder__hint{
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: var(--text-2xs);
+  color: var(--muted2);
+}
+
+/* Lightbox (reuses the shared .modal scaffold from the certificate modal) */
+.projLightbox__panel{ width: min(760px, calc(100% - 26px)); }
+.projLightbox__content{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap: 10px;
+  padding: 14px;
+}
+.projLightbox__image{
+  max-width: 100%;
+  max-height: min(70vh, 560px);
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  background: rgba(0,0,0,.2);
+}
+.projLightbox__nav{
+  flex: 0 0 auto;
+  width: 38px; height: 38px;
+  display:flex; align-items:center; justify-content:center;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+.projLightbox__nav:hover{ background: rgba(255,255,255,.14); }
+
+/* ---- Dashboard multi-image picker ---- */
+.multiImageGrid{ display:flex; flex-wrap: wrap; gap: 10px; }
+.multiImageGrid__item{ position: relative; }
+.multiImageGrid__remove{
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 20px; height: 20px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.2);
+  background: var(--danger);
+  color: #fff;
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+}
 
 .timelineItem__org{
   margin: 0 0 4px;
