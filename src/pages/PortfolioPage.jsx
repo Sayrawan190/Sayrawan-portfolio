@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import AmbientTilt from "../components/AmbientTilt";
 import Header from "../components/Header";
 import Hero from "../components/Hero";
 import About from "../components/About";
@@ -28,6 +29,7 @@ export default function PortfolioPage() {
 
   return (
     <>
+      <AmbientTilt />
       <a className="skip-link" href="#main">Skip to content</a>
       <Header />
       <main id="main">

@@ -1154,6 +1154,26 @@ html[dir="rtl"] .projectRow__content{ direction: rtl; }
    ========================================================= */
 
 /* ---- Portfolio additions ---- */
+/* Purely decorative — not a spotlight that follows the cursor, just the
+   existing ambient glow (same soft, oversized gradients as body's own
+   background) leaning a small, capped distance toward the cursor's general
+   direction. `inset: -60px` + easing on transform means the shift never
+   reveals a hard edge and never reads as "a shape chasing the mouse".
+   Skipped for reduced-motion/touch visitors in AmbientTilt.jsx, so the CSS
+   vars are simply never set there and it stays put. */
+.bgTilt{
+  position: fixed;
+  inset: -60px;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(1100px 560px at 68% -15%, rgba(var(--accent-rgb),.18), transparent 62%),
+    radial-gradient(750px 380px at 14% 12%, rgba(var(--accent2-rgb),.12), transparent 58%);
+  transform: translate(var(--tiltX, 0px), var(--tiltY, 0px));
+  transition: transform .6s cubic-bezier(.2,.8,.2,1);
+  will-change: transform;
+}
+
 .emptyState{
   border-radius: var(--radius-xl);
   border: 1px dashed rgba(255,255,255,.18);
