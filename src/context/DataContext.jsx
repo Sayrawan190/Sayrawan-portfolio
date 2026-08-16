@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useLang } from "./LangContext";
 import { useT } from "../data/uiText";
+import LoadingScreen from "../components/LoadingScreen";
 
 const DataContext = createContext(null);
 
@@ -109,7 +110,7 @@ export function DataProvider({ children }) {
     [data]
   );
 
-  if (loading) return <div className="dataStatus">{t.dash_data_loading}</div>;
+  if (loading) return <LoadingScreen text={t.dash_data_loading} />;
   if (error) return <div className="dataStatus dataStatus--error">{t.dash_data_error}</div>;
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
