@@ -14,7 +14,7 @@ export default function PortfolioPage() {
   const location = useLocation();
 
   useEffect(() => {
-    document.title = "Portfolio";
+    document.title = "Sayrawan Portfolio";
   }, []);
 
   // HashRouter routes on the same "#" fragment the in-page nav links use for

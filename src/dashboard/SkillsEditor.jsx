@@ -5,6 +5,7 @@ import { useT } from "../data/uiText";
 import { useData } from "../context/DataContext";
 import { useToast } from "../context/ToastContext";
 import ConfirmDialog from "./components/ConfirmDialog";
+import IconPicker from "./components/IconPicker";
 
 function AddSkillRow({ t, onAdd }) {
   const [en, setEn] = useState("");
@@ -38,18 +39,20 @@ function CategoryBlock({ category, t, onUpdateCategory, onDeleteCategory, onAddS
     onUpdateCategory({ name, icon });
   }
 
+  function pickIcon(nextIcon) {
+    setIcon(nextIcon);
+    // The picker closes itself on selection, so there's no blur event to
+    // hang the save off like the two text fields below — save right away
+    // with the fresh value instead of the (still-stale, pre-update) `icon`
+    // from this closure.
+    onUpdateCategory({ name, icon: nextIcon });
+  }
+
   return (
     <div className="categoryBlock">
       <div className="categoryHead">
         <div className="categoryHead__title" style={{ flexWrap: "wrap" }}>
-          <input
-            type="text"
-            value={icon}
-            onChange={(e) => setIcon(e.target.value)}
-            onBlur={saveHeader}
-            style={{ width: 44, textAlign: "center", padding: "8px 6px", borderRadius: 10, border: "1px solid rgba(255,255,255,.14)", background: "rgba(255,255,255,.04)", color: "inherit" }}
-            aria-label={t.dash_icon}
-          />
+          <IconPicker value={icon} onChange={pickIcon} label={t.dash_icon} />
           <input
             type="text"
             value={name.en}
@@ -147,7 +150,7 @@ export default function SkillsEditor() {
 
   function addCategory() {
     runOrToastError(() =>
-      addItem("skillCategories", { icon: "✨", name: { en: "New Category", ar: "فئة جديدة" }, skills: [] }, "cat")
+      addItem("skillCategories", { icon: "", name: { en: "New Category", ar: "فئة جديدة" }, skills: [] }, "cat")
     );
   }
 

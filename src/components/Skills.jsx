@@ -4,6 +4,13 @@ import { useT } from "../data/uiText";
 import { useData } from "../context/DataContext";
 import { L } from "../utils/field";
 import { fadeUp, staggerParent, viewportOnce } from "../utils/motion";
+import { SKILL_ICON_MAP } from "../utils/skillIcons";
+
+function CategoryIcon({ icon }) {
+  const Icon = SKILL_ICON_MAP[icon];
+  if (Icon) return <Icon size={18} aria-hidden="true" />;
+  return icon || "🧩";
+}
 
 // Only converts a *recognized* level word into a dot rating — never invents a
 // number from arbitrary free text. The dashboard's "Level / note" field is
@@ -61,7 +68,7 @@ export default function Skills() {
               return (
                 <motion.article className="skillCard" key={cat.id} variants={card}>
                   <header className="skillCard__head">
-                    <span className="skillCard__icon" aria-hidden="true">{cat.icon || "🧩"}</span>
+                    <span className="skillCard__icon" aria-hidden="true"><CategoryIcon icon={cat.icon} /></span>
                     <div>
                       <h3 className="skillCard__title">{L(cat.name, lang)}</h3>
                       <p className="skillCard__count">
