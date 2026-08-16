@@ -45,7 +45,7 @@ export default function Hero() {
               <motion.a
                 className="btn btn--primary"
                 href={p.cvLink}
-                download
+                download="Abdullah Al-Serawan CV.pdf"
                 aria-label="Download CV"
                 whileHover={liftHover(reduced)}
                 whileTap={tapScale(reduced)}

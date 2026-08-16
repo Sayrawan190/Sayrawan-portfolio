@@ -5,6 +5,7 @@ import { useData } from "../context/DataContext";
 import { useToast } from "../context/ToastContext";
 import LocalizedField from "./components/LocalizedField";
 import ImageInput from "./components/ImageInput";
+import PdfInput from "./components/PdfInput";
 import ConfirmDialog from "./components/ConfirmDialog";
 
 export default function ProfileEditor() {
@@ -207,11 +208,8 @@ export default function ProfileEditor() {
 
       <section className="dashSection">
         <h2 className="dashSection__title">Links</h2>
+        <PdfInput label={t.dash_cv_link} value={form.cvLink} onChange={(v) => set("cvLink", v)} />
         <div className="formGrid">
-          <div className="field">
-            <label>{t.dash_cv_link}</label>
-            <input type="text" value={form.cvLink || ""} onChange={(e) => set("cvLink", e.target.value)} placeholder="cv.pdf or https://..." />
-          </div>
           <div className="field">
             <label>{t.dash_linkedin}</label>
             <input type="url" value={form.linkedin || ""} onChange={(e) => set("linkedin", e.target.value)} placeholder="https://linkedin.com/in/..." />
