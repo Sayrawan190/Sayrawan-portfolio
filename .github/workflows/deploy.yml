@@ -1,0 +1,25 @@
+name: Deploy Portfolio
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Deploy portfolio
+        run: |
+          set -e
+
+          cd /home/arthur/Documents/SecondS/VSCode/Sayrawan-portfolio
+
+          git fetch origin main
+          git reset --hard origin/main
+
+          npm ci
+          npm run build
+
+          pm2 restart sayrawan-portfolio
