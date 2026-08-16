@@ -35,5 +35,8 @@ if (fs.existsSync(distDir)) {
   app.get("/{*splat}", (req, res) => res.sendFile(path.join(distDir, "index.html")));
 }
 
-const port = Number(process.env.PORT) || 4000;
-app.listen(port, () => console.log(`API listening on http://localhost:${port}`));
+const PORT = Number(process.env.PORT) || 3002;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

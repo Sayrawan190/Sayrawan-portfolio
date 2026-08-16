@@ -201,8 +201,8 @@ export default function ProfileEditor() {
       </section>
 
       <section className="dashSection">
-        <h2 className="dashSection__title">{t.dash_focus} / {t.dash_location}</h2>
-        <LocalizedField label={t.dash_focus} value={form.focus} onChange={(v) => set("focus", v)} />
+        <h2 className="dashSection__title">{t.dash_languages} / {t.dash_location}</h2>
+        <LocalizedField label={t.dash_languages} value={form.focus} onChange={(v) => set("focus", v)} />
         <LocalizedField label={t.dash_location} value={form.location} onChange={(v) => set("location", v)} />
       </section>
 

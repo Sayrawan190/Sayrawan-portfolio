@@ -91,7 +91,7 @@ export default function Hero() {
 
           <motion.div className="hero__meta" variants={item}>
             <div className="metaCard">
-              <p className="metaCard__label">{t.meta_focus_label}</p>
+              <p className="metaCard__label">{t.meta_languages_label}</p>
               <p className="metaCard__value">{L(p.focus, lang)}</p>
             </div>
             <div className="metaCard">

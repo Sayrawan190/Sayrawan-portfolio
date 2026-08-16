@@ -19,7 +19,7 @@ export const SEED_PROFILE = {
   linkedin: "https://www.linkedin.com/in/abdullah-al-serawan-390158348",
   x: "https://x.com/sayrawan2?s=21",
   phone: "+966 535856530",
-  focus: { en: "AI • CS Fundamentals • Front-End", ar: "ذكاء اصطناعي • أساسيات CS • فرونت-إند" },
+  focus: { en: "Arabic (Native) • English (Intermediate)", ar: "العربية (اللغة الأم) • الإنجليزية (متوسط)" },
   location: { en: "Saudi Arabia", ar: "السعودية" },
   summary: [
     { en: "Fast learner with consistent self-development", ar: "سرعة تعلّم مع تطوير مستمر" },

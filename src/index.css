@@ -356,7 +356,7 @@ button{ font: inherit; }
 }
 .hero__grid{
   display:grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr);
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, .65fr);
   gap: 24px;
   align-items: start;
 }
@@ -424,6 +424,11 @@ button{ font: inherit; }
   line-height: 1.1;
   letter-spacing: .2px;
 }
+/* RotatingWords.jsx pre-measures whether the prefix + widest word will fit
+   on one line and adds `is-wrapped` when they won't — the rotating word then
+   lands on its own second line, pushed to the end edge instead of sitting
+   flush at the start under the prefix. */
+.heroWords.is-wrapped .heroWords__viewport{ margin-inline-start: auto; }
 .heroWords__viewport{
   position: relative;
   display: inline-block;

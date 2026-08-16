@@ -17,7 +17,10 @@ export default function RotatingWords({ words, lang, prefix, className = "" }) {
   );
   const [index, setIndex] = useState(0);
   const measureRef = useRef(null);
+  const rootRef = useRef(null);
+  const prefixRef = useRef(null);
   const [reservedWidth, setReservedWidth] = useState(0);
+  const [willWrap, setWillWrap] = useState(false);
 
   useLayoutEffect(() => {
     setIndex(0);
@@ -41,7 +44,8 @@ export default function RotatingWords({ words, lang, prefix, className = "" }) {
   // same typography, before the browser paints.
   useLayoutEffect(() => {
     const container = measureRef.current;
-    if (!container) return undefined;
+    const root = rootRef.current;
+    if (!container || !root) return undefined;
 
     function measure() {
       let max = 0;
@@ -49,6 +53,16 @@ export default function RotatingWords({ words, lang, prefix, className = "" }) {
         max = Math.max(max, span.getBoundingClientRect().width);
       }
       setReservedWidth(Math.ceil(max));
+
+      // The prefix + widest word sit side by side (flex-wrap) and only wrap
+      // onto their own line past a certain viewport width — a long English
+      // word wrapping there used to always land flush left. Measuring ahead
+      // of time (same values the browser itself will wrap on) lets the
+      // CSS push that wrapped line to the end edge instead, rather than
+      // trying to detect the wrap after the fact.
+      const prefixWidth = prefixRef.current?.getBoundingClientRect().width ?? 0;
+      const gap = parseFloat(getComputedStyle(root).columnGap) || 0;
+      setWillWrap(prefixWidth + gap + max > root.clientWidth);
     }
 
     // The font-size is `vw`-based (matches the hero name's own responsive
@@ -64,8 +78,8 @@ export default function RotatingWords({ words, lang, prefix, className = "" }) {
   const current = L(list[index], lang);
 
   return (
-    <div className={`heroWords ${className}`.trim()}>
-      {prefix && <span className="heroWords__prefix">{prefix}</span>}
+    <div ref={rootRef} className={`heroWords ${willWrap ? "is-wrapped" : ""} ${className}`.trim()}>
+      {prefix && <span ref={prefixRef} className="heroWords__prefix">{prefix}</span>}
       {/* Full list once for screen readers, instead of a live region that
           would re-announce a new word every couple of seconds. */}
       <span className="sr-only">{list.map((w) => L(w, lang)).join(", ")}</span>
