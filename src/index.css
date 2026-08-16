@@ -1650,6 +1650,29 @@ input:focus, textarea:focus, select:focus{
   flex-wrap: wrap;
 }
 
+/* Drag-to-reorder wrapper (SortableItem.jsx) — sits around a row's existing
+   markup (.dashRow, .categoryBlock, ...) rather than inside it, so the
+   handle never has to fight that markup's own flex layout. */
+.sortableItem{ display:flex; align-items: stretch; gap: 8px; }
+.sortableItem.is-dragging{ opacity: .6; }
+.sortableItem__handle{
+  flex: 0 0 auto;
+  align-self: stretch;
+  width: 28px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.03);
+  color: var(--muted2);
+  cursor: grab;
+  touch-action: none;
+  transition: color .15s ease, background .15s ease, border-color .15s ease;
+}
+.sortableItem__handle:hover{ color: var(--text); background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.2); }
+.sortableItem__handle:active{ cursor: grabbing; }
+
 /* Data list / table rows */
 .dashList{ display:flex; flex-direction: column; gap: 10px; }
 .dashRow{

@@ -6,6 +6,8 @@ import { useData } from "../context/DataContext";
 import { useToast } from "../context/ToastContext";
 import ConfirmDialog from "./components/ConfirmDialog";
 import IconPicker from "./components/IconPicker";
+import SortableList from "./components/SortableList";
+import SortableItem from "./components/SortableItem";
 
 function AddSkillRow({ t, onAdd }) {
   const [en, setEn] = useState("");
@@ -49,7 +51,7 @@ function CategoryBlock({ category, t, onUpdateCategory, onDeleteCategory, onAddS
   }
 
   return (
-    <div className="categoryBlock">
+    <>
       <div className="categoryHead">
         <div className="categoryHead__title" style={{ flexWrap: "wrap" }}>
           <IconPicker value={icon} onChange={pickIcon} label={t.dash_icon} />
@@ -108,7 +110,7 @@ function CategoryBlock({ category, t, onUpdateCategory, onDeleteCategory, onAddS
         onConfirm={() => { onDeleteCategory(); setConfirmDelete(false); }}
         onCancel={() => setConfirmDelete(false)}
       />
-    </div>
+    </>
   );
 }
 
@@ -131,7 +133,7 @@ function SkillEditChip({ skill, t, onSave, onCancel }) {
 export default function SkillsEditor() {
   const { lang } = useLang();
   const t = useT(lang);
-  const { data, addItem, updateItem, deleteItem, addSkillToCategory, updateSkillInCategory, deleteSkillFromCategory } = useData();
+  const { data, addItem, updateItem, deleteItem, reorderList, addSkillToCategory, updateSkillInCategory, deleteSkillFromCategory } = useData();
   const { showToast } = useToast();
   const categories = data.skillCategories || [];
 
@@ -154,6 +156,10 @@ export default function SkillsEditor() {
     );
   }
 
+  function handleReorderCategories(nextCategories) {
+    runOrToastError(() => reorderList("skillCategories", nextCategories));
+  }
+
   return (
     <div>
       <div className="dashHead">
@@ -167,18 +173,21 @@ export default function SkillsEditor() {
       {categories.length === 0 ? (
         <div className="emptyState">{t.dash_no_categories}</div>
       ) : (
-        categories.map((cat) => (
-          <CategoryBlock
-            key={cat.id}
-            category={cat}
-            t={t}
-            onUpdateCategory={(patch) => runOrToastError(() => updateItem("skillCategories", cat.id, patch))}
-            onDeleteCategory={() => runOrToastError(() => deleteItem("skillCategories", cat.id))}
-            onAddSkill={(skill) => runOrToastError(() => addSkillToCategory(cat.id, skill))}
-            onUpdateSkill={(skillId, patch) => runOrToastError(() => updateSkillInCategory(cat.id, skillId, patch))}
-            onDeleteSkill={(skillId) => runOrToastError(() => deleteSkillFromCategory(cat.id, skillId))}
-          />
-        ))
+        <SortableList items={categories} getId={(cat) => cat.id} onReorder={handleReorderCategories}>
+          {categories.map((cat) => (
+            <SortableItem key={cat.id} id={cat.id} className="categoryBlock" dragLabel={t.dash_drag_reorder}>
+              <CategoryBlock
+                category={cat}
+                t={t}
+                onUpdateCategory={(patch) => runOrToastError(() => updateItem("skillCategories", cat.id, patch))}
+                onDeleteCategory={() => runOrToastError(() => deleteItem("skillCategories", cat.id))}
+                onAddSkill={(skill) => runOrToastError(() => addSkillToCategory(cat.id, skill))}
+                onUpdateSkill={(skillId, patch) => runOrToastError(() => updateSkillInCategory(cat.id, skillId, patch))}
+                onDeleteSkill={(skillId) => runOrToastError(() => deleteSkillFromCategory(cat.id, skillId))}
+              />
+            </SortableItem>
+          ))}
+        </SortableList>
       )}
     </div>
   );

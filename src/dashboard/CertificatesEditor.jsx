@@ -8,6 +8,8 @@ import LocalizedField from "./components/LocalizedField";
 import ImageInput from "./components/ImageInput";
 import FormModal from "./components/FormModal";
 import ConfirmDialog from "./components/ConfirmDialog";
+import SortableList from "./components/SortableList";
+import SortableItem from "./components/SortableItem";
 import { L, emptyLocalized } from "../utils/field";
 
 const BLANK = {
@@ -54,7 +56,7 @@ function CertForm({ initial, t, saving, onSave, onClose }) {
 export default function CertificatesEditor() {
   const { lang } = useLang();
   const t = useT(lang);
-  const { data, addItem, updateItem, deleteItem } = useData();
+  const { data, addItem, updateItem, deleteItem, reorderList } = useData();
   const { showToast } = useToast();
   const [editing, setEditing] = useState(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
@@ -89,6 +91,14 @@ export default function CertificatesEditor() {
     }
   }
 
+  async function handleReorder(nextCerts) {
+    try {
+      await reorderList("certificates", nextCerts);
+    } catch {
+      showToast(t.dash_save_error, "danger");
+    }
+  }
+
   return (
     <div>
       <div className="dashHead">
@@ -102,23 +112,25 @@ export default function CertificatesEditor() {
       {certs.length === 0 ? (
         <div className="emptyState">{t.empty_certs}</div>
       ) : (
-        <div className="dashList">
-          {certs.map((c) => (
-            <div className="dashRow" key={c.id}>
-              <div className="dashRow__main">
-                {c.image ? <img className="dashRow__thumb" src={c.image} alt="" /> : <div className="dashRow__icon"><GraduationCap size={18} aria-hidden="true" /></div>}
-                <div className="dashRow__text">
-                  <p className="dashRow__title">{L(c.name, lang)}</p>
-                  <p className="dashRow__sub">{[L(c.issuer, lang), c.date].filter(Boolean).join(" · ")}</p>
+        <SortableList items={certs} getId={(c) => c.id} onReorder={handleReorder}>
+          <div className="dashList">
+            {certs.map((c) => (
+              <SortableItem key={c.id} id={c.id} className="dashRow" dragLabel={t.dash_drag_reorder}>
+                <div className="dashRow__main">
+                  {c.image ? <img className="dashRow__thumb" src={c.image} alt="" /> : <div className="dashRow__icon"><GraduationCap size={18} aria-hidden="true" /></div>}
+                  <div className="dashRow__text">
+                    <p className="dashRow__title">{L(c.name, lang)}</p>
+                    <p className="dashRow__sub">{[L(c.issuer, lang), c.date].filter(Boolean).join(" · ")}</p>
+                  </div>
                 </div>
-              </div>
-              <div className="dashRow__actions">
-                <button className="btn btn--ghost btn--sm" type="button" onClick={() => setEditing(c)}>{t.dash_edit}</button>
-                <button className="btn btn--danger btn--sm" type="button" onClick={() => setConfirmDeleteId(c.id)}>{t.dash_delete}</button>
-              </div>
-            </div>
-          ))}
-        </div>
+                <div className="dashRow__actions">
+                  <button className="btn btn--ghost btn--sm" type="button" onClick={() => setEditing(c)}>{t.dash_edit}</button>
+                  <button className="btn btn--danger btn--sm" type="button" onClick={() => setConfirmDeleteId(c.id)}>{t.dash_delete}</button>
+                </div>
+              </SortableItem>
+            ))}
+          </div>
+        </SortableList>
       )}
 
       <FormModal open={!!editing} title={editing === "new" ? t.dash_add : t.dash_edit} onClose={() => (saving ? null : setEditing(null))} wide>

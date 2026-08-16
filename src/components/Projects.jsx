@@ -3,7 +3,15 @@ import { useLang } from "../context/LangContext";
 import { useT } from "../data/uiText";
 import { useData } from "../context/DataContext";
 import { L } from "../utils/field";
-import { fadeUp, staggerParent, viewportOnce } from "../utils/motion";
+import { fadeUp, staggerParent } from "../utils/motion";
+
+// Not the shared `viewportOnce` (amount: 0.2) — the folder-card rows make
+// this list far taller than the viewport on mobile, so scrolling straight to
+// it via a nav-link jump can land with under 20% ever on screen at once,
+// and the fade-in trigger with `once: true` then never fires again — every
+// row stays permanently at opacity: 0. A near-zero amount only needs a
+// sliver on screen to start the animation.
+const projectsViewport = { once: true, amount: 0.01 };
 import ProjectFolder from "./ProjectFolder";
 
 function ArrowIcon() {
@@ -85,7 +93,7 @@ export default function Projects() {
             variants={container}
             initial="hidden"
             whileInView="show"
-            viewport={viewportOnce}
+            viewport={projectsViewport}
           >
             {projects.map((p) => (
               <ProjectRow key={p.id} project={p} lang={lang} t={t} variants={rowVariants} />

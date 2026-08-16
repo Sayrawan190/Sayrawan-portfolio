@@ -8,6 +8,8 @@ import LocalizedField from "./components/LocalizedField";
 import MultiImageInput from "./components/MultiImageInput";
 import FormModal from "./components/FormModal";
 import ConfirmDialog from "./components/ConfirmDialog";
+import SortableList from "./components/SortableList";
+import SortableItem from "./components/SortableItem";
 import { L, emptyLocalized } from "../utils/field";
 
 const BLANK = {
@@ -65,7 +67,7 @@ function ProjectForm({ initial, t, saving, onSave, onClose }) {
 export default function ProjectsEditor() {
   const { lang } = useLang();
   const t = useT(lang);
-  const { data, addItem, updateItem, deleteItem } = useData();
+  const { data, addItem, updateItem, deleteItem, reorderList } = useData();
   const { showToast } = useToast();
   const [editing, setEditing] = useState(null); // null | "new" | project object
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
@@ -100,6 +102,14 @@ export default function ProjectsEditor() {
     }
   }
 
+  async function handleReorder(nextProjects) {
+    try {
+      await reorderList("projects", nextProjects);
+    } catch {
+      showToast(t.dash_save_error, "danger");
+    }
+  }
+
   return (
     <div>
       <div className="dashHead">
@@ -113,27 +123,29 @@ export default function ProjectsEditor() {
       {projects.length === 0 ? (
         <div className="emptyState">{t.empty_projects}</div>
       ) : (
-        <div className="dashList">
-          {projects.map((p) => (
-            <div className="dashRow" key={p.id}>
-              <div className="dashRow__main">
-                {p.images?.[0] ? (
-                  <img className="dashRow__thumb" src={p.images[0]} alt="" />
-                ) : (
-                  <div className="dashRow__icon"><Briefcase size={18} aria-hidden="true" /></div>
-                )}
-                <div className="dashRow__text">
-                  <p className="dashRow__title">{L(p.name, lang)}</p>
-                  <p className="dashRow__sub">{(p.technologies || []).join(", ") || L(p.description, lang)}</p>
+        <SortableList items={projects} getId={(p) => p.id} onReorder={handleReorder}>
+          <div className="dashList">
+            {projects.map((p) => (
+              <SortableItem key={p.id} id={p.id} className="dashRow" dragLabel={t.dash_drag_reorder}>
+                <div className="dashRow__main">
+                  {p.images?.[0] ? (
+                    <img className="dashRow__thumb" src={p.images[0]} alt="" />
+                  ) : (
+                    <div className="dashRow__icon"><Briefcase size={18} aria-hidden="true" /></div>
+                  )}
+                  <div className="dashRow__text">
+                    <p className="dashRow__title">{L(p.name, lang)}</p>
+                    <p className="dashRow__sub">{(p.technologies || []).join(", ") || L(p.description, lang)}</p>
+                  </div>
                 </div>
-              </div>
-              <div className="dashRow__actions">
-                <button className="btn btn--ghost btn--sm" type="button" onClick={() => setEditing(p)}>{t.dash_edit}</button>
-                <button className="btn btn--danger btn--sm" type="button" onClick={() => setConfirmDeleteId(p.id)}>{t.dash_delete}</button>
-              </div>
-            </div>
-          ))}
-        </div>
+                <div className="dashRow__actions">
+                  <button className="btn btn--ghost btn--sm" type="button" onClick={() => setEditing(p)}>{t.dash_edit}</button>
+                  <button className="btn btn--danger btn--sm" type="button" onClick={() => setConfirmDeleteId(p.id)}>{t.dash_delete}</button>
+                </div>
+              </SortableItem>
+            ))}
+          </div>
+        </SortableList>
       )}
 
       <FormModal
