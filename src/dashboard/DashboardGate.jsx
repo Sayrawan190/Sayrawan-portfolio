@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Outlet, Link } from "react-router-dom";
+import { Globe, TriangleAlert } from "lucide-react";
 import { useLang } from "../context/LangContext";
 import { useT } from "../data/uiText";
 
@@ -80,7 +81,7 @@ export default function DashboardGate() {
       <div className="gatePage__bg" aria-hidden="true"></div>
 
       <button type="button" className="btn btn--ghost gatePage__lang" onClick={toggleLang}>
-        <span className="btn__icon" aria-hidden="true">🌐</span>
+        <span className="btn__icon" aria-hidden="true"><Globe size={16} /></span>
         <span>{lang === "ar" ? "EN" : "AR"}</span>
       </button>
 
@@ -128,7 +129,7 @@ export default function DashboardGate() {
 
           {setupError && (
             <p className="gateError">
-              <span aria-hidden="true">⚠</span> {setupError}
+              <TriangleAlert size={14} aria-hidden="true" /> {setupError}
             </p>
           )}
 
@@ -209,7 +210,7 @@ export default function DashboardGate() {
 
           {error && (
             <p className="gateError">
-              <span aria-hidden="true">⚠</span> {t.gate_error}
+              <TriangleAlert size={14} aria-hidden="true" /> {t.gate_error}
             </p>
           )}
 

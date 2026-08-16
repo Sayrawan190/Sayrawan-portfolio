@@ -1,3 +1,5 @@
+import { X } from "lucide-react";
+
 export default function FormModal({ open, title, onClose, children, wide }) {
   if (!open) return null;
   return (
@@ -11,7 +13,7 @@ export default function FormModal({ open, title, onClose, children, wide }) {
       >
         <div className="modal__head">
           <h3 className="modal__title">{title}</h3>
-          <button className="iconBtn" type="button" onClick={onClose} aria-label="Close">✕</button>
+          <button className="iconBtn" type="button" onClick={onClose} aria-label="Close"><X size={16} aria-hidden="true" /></button>
         </div>
         <div className="modal__content">{children}</div>
       </div>

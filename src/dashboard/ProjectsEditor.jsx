@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Briefcase } from "lucide-react";
 import { useLang } from "../context/LangContext";
 import { useT } from "../data/uiText";
 import { useData } from "../context/DataContext";
@@ -119,7 +120,7 @@ export default function ProjectsEditor() {
                 {p.images?.[0] ? (
                   <img className="dashRow__thumb" src={p.images[0]} alt="" />
                 ) : (
-                  <div className="dashRow__icon">💼</div>
+                  <div className="dashRow__icon"><Briefcase size={18} aria-hidden="true" /></div>
                 )}
                 <div className="dashRow__text">
                   <p className="dashRow__title">{L(p.name, lang)}</p>

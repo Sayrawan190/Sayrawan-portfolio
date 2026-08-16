@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { FileText, Upload } from "lucide-react";
 
 const MAX_BYTES = 2.5 * 1024 * 1024; // ~2.5MB, keeps the profile row/DB request sane
 
@@ -48,7 +49,7 @@ export default function PdfInput({ label, value, onChange, hint }) {
             download="Abdullah Al-Serawan CV.pdf"
             style={{ cursor: "pointer" }}
           >
-            📄 {fileNameFromUrl(value)}
+            <FileText size={14} aria-hidden="true" /> {fileNameFromUrl(value)}
           </a>
         ) : (
           <span className="fieldHint">No CV uploaded yet</span>
@@ -63,7 +64,7 @@ export default function PdfInput({ label, value, onChange, hint }) {
           style={{ flex: 1, minWidth: 160 }}
         />
         <label className="fileBtn">
-          📤 Upload PDF
+          <Upload size={14} aria-hidden="true" /> Upload PDF
           <input ref={fileRef} type="file" accept="application/pdf" onChange={handleFile} />
         </label>
         {value && (

@@ -1,13 +1,14 @@
 import { NavLink, Outlet, Link } from "react-router-dom";
+import { User, Puzzle, Briefcase, Compass, GraduationCap, Globe } from "lucide-react";
 import { useLang } from "../context/LangContext";
 import { useT } from "../data/uiText";
 
 const TABS = [
-  { to: "/dashboard", key: "dash_tab_profile", icon: "👤", end: true },
-  { to: "/dashboard/skills", key: "dash_tab_skills", icon: "🧩" },
-  { to: "/dashboard/projects", key: "dash_tab_projects", icon: "💼" },
-  { to: "/dashboard/experience", key: "dash_tab_experience", icon: "🧭" },
-  { to: "/dashboard/certificates", key: "dash_tab_certificates", icon: "🎓" },
+  { to: "/dashboard", key: "dash_tab_profile", Icon: User, end: true },
+  { to: "/dashboard/skills", key: "dash_tab_skills", Icon: Puzzle },
+  { to: "/dashboard/projects", key: "dash_tab_projects", Icon: Briefcase },
+  { to: "/dashboard/experience", key: "dash_tab_experience", Icon: Compass },
+  { to: "/dashboard/certificates", key: "dash_tab_certificates", Icon: GraduationCap },
 ];
 
 export default function DashboardLayout() {
@@ -35,7 +36,7 @@ export default function DashboardLayout() {
               end={tab.end}
               className={({ isActive }) => `dashNav__link${isActive ? " is-active" : ""}`}
             >
-              <span aria-hidden="true">{tab.icon}</span>
+              <tab.Icon size={17} aria-hidden="true" />
               <span>{t[tab.key]}</span>
             </NavLink>
           ))}
@@ -43,7 +44,7 @@ export default function DashboardLayout() {
 
         <div className="dashSidebar__footer">
           <button className="btn btn--ghost" type="button" onClick={toggleLang}>
-            🌐 {lang === "ar" ? "English" : "العربية"}
+            <Globe size={16} aria-hidden="true" /> {lang === "ar" ? "English" : "العربية"}
           </button>
           <Link className="btn btn--ghost" to="/">← {t.dash_back_site}</Link>
           <button className="btn btn--ghost" type="button" onClick={handleLogout}>

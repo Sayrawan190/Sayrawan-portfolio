@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { Upload, X } from "lucide-react";
 
 const MAX_BYTES = 1.5 * 1024 * 1024; // ~1.5MB, keeps localStorage/DB rows sane
 
@@ -47,7 +48,7 @@ export default function MultiImageInput({ label, value, onChange, max = 5, hint,
         {images.map((src, i) => (
           <div className="multiImageGrid__item" key={i}>
             <img className="imagePreview" src={src} alt="" />
-            <button type="button" className="multiImageGrid__remove" onClick={() => removeAt(i)} aria-label="Remove image">✕</button>
+            <button type="button" className="multiImageGrid__remove" onClick={() => removeAt(i)} aria-label="Remove image"><X size={11} aria-hidden="true" /></button>
           </div>
         ))}
       </div>
@@ -62,7 +63,7 @@ export default function MultiImageInput({ label, value, onChange, max = 5, hint,
           />
           <button type="button" className="btn btn--ghost btn--sm" onClick={handleAddUrl} disabled={!urlText.trim()}>{addLabel}</button>
           <label className="fileBtn">
-            📤 {uploadLabel}
+            <Upload size={14} aria-hidden="true" /> {uploadLabel}
             <input ref={fileRef} type="file" accept="image/*" onChange={handleFile} />
           </label>
         </div>

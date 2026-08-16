@@ -336,6 +336,9 @@ button{ font: inherit; }
 .iconBtn{
   width: 40px;
   height: 40px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   border-radius: var(--radius-sm);
   border: 1px solid rgba(255,255,255,.14);
   background: rgba(255,255,255,.06);
@@ -419,29 +422,32 @@ button{ font: inherit; }
 }
 .heroWords__prefix{
   color: rgba(255,255,255,.96);
-  font-size: calc(var(--text-3xl) * .82);
+  font-size: calc(var(--text-3xl) * .82 * var(--heroWords-scale, 1));
   font-weight: 700;
   line-height: 1.1;
   letter-spacing: .2px;
 }
 /* RotatingWords.jsx pre-measures whether the prefix + widest word will fit
-   on one line and adds `is-wrapped` when they won't — the rotating word then
-   lands on its own second line, pushed to the end edge instead of sitting
-   flush at the start under the prefix. */
+   on one line, even after shrinking together down to MIN_SCALE, and only
+   then adds `is-wrapped` — the rotating word lands on its own second line,
+   pushed to the end edge instead of sitting flush at the start under the
+   prefix (the normal case is the shrink alone already keeps them on one
+   line, so this is a rarely-hit fallback, not the primary mechanism). */
 .heroWords.is-wrapped .heroWords__viewport{ margin-inline-start: auto; }
 .heroWords__viewport{
   position: relative;
   display: inline-block;
   max-width: 100%;
   vertical-align: bottom;
-  font-size: var(--text-3xl);
+  font-size: calc(var(--text-3xl) * var(--heroWords-scale, 1));
   line-height: 1.1;
   height: 1.3em;
   overflow: hidden;
 }
-/* Hidden copies of every word, rendered off-screen with the same bold
-   typography as the real word, used purely so RotatingWords.jsx can measure
-   each one's true pixel width — see the comment above useLayoutEffect there. */
+/* Hidden copies of the prefix and every word, rendered off-screen at their
+   true 100%-scale typography (never affected by --heroWords-scale), used
+   purely so RotatingWords.jsx can measure their real pixel widths — see the
+   comment above useLayoutEffect there. */
 .heroWords__measure{
   position: absolute;
   visibility: hidden;
@@ -455,6 +461,20 @@ button{ font: inherit; }
   display: inline-block;
   white-space: nowrap;
   font-weight: 800;
+}
+/* Same hidden/positional base as .heroWords__measure but sized to match
+   .heroWords__prefix's own (unscaled) typography, not the word's. */
+.heroWords__measurePrefix{
+  position: absolute;
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+  white-space: nowrap;
+  font-size: calc(var(--text-3xl) * .82);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: .2px;
 }
 .heroWords__word{
   position: absolute;
@@ -1368,6 +1388,9 @@ html[dir="rtl"] .projectRow__content{ direction: rtl; }
   top: -6px;
   right: -6px;
   width: 20px; height: 20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,.2);
   background: var(--danger);

@@ -1,3 +1,5 @@
+import { X } from "lucide-react";
+
 export default function ConfirmDialog({ open, title, body, confirmLabel, cancelLabel, onConfirm, onCancel }) {
   if (!open) return null;
   return (
@@ -6,7 +8,7 @@ export default function ConfirmDialog({ open, title, body, confirmLabel, cancelL
       <div className="modal__panel confirmPanel" role="dialog" aria-modal="true">
         <div className="modal__head">
           <h3 className="modal__title">{title}</h3>
-          <button className="iconBtn" type="button" onClick={onCancel} aria-label="Close">✕</button>
+          <button className="iconBtn" type="button" onClick={onCancel} aria-label="Close"><X size={16} aria-hidden="true" /></button>
         </div>
         <div className="modal__content">
           <p>{body}</p>

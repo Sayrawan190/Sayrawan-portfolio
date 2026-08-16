@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { GraduationCap } from "lucide-react";
 import { useLang } from "../context/LangContext";
 import { useT } from "../data/uiText";
 import { useData } from "../context/DataContext";
@@ -105,7 +106,7 @@ export default function CertificatesEditor() {
           {certs.map((c) => (
             <div className="dashRow" key={c.id}>
               <div className="dashRow__main">
-                {c.image ? <img className="dashRow__thumb" src={c.image} alt="" /> : <div className="dashRow__icon">🎓</div>}
+                {c.image ? <img className="dashRow__thumb" src={c.image} alt="" /> : <div className="dashRow__icon"><GraduationCap size={18} aria-hidden="true" /></div>}
                 <div className="dashRow__text">
                   <p className="dashRow__title">{L(c.name, lang)}</p>
                   <p className="dashRow__sub">{[L(c.issuer, lang), c.date].filter(Boolean).join(" · ")}</p>

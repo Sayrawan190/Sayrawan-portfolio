@@ -63,8 +63,8 @@ export default function Hero() {
                 whileTap={tapScale(reduced)}
               >
                 <span className="btn__icon" aria-hidden="true">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M6.94 6.5a2.19 2.19 0 1 1 0-4.38 2.19 2.19 0 0 1 0 4.38ZM3.5 21.5V8.5h6.88v13H3.5Zm10.6 0V8.5h6.6v1.78c.92-1.22 2.36-2.25 4.78-2.25 4.2 0 6.02 2.47 6.02 7.2v6.27h-6.88v-5.66c0-2.1-.4-3.3-2.01-3.3-1.18 0-1.88.79-2.18 1.55-.12.3-.16.7-.16 1.11v6.3h-6.17Z" fill="currentColor" />
+                  <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M20.5 2h-17A1.5 1.5 0 0 0 2 3.5v17A1.5 1.5 0 0 0 3.5 22h17a1.5 1.5 0 0 0 1.5-1.5v-17A1.5 1.5 0 0 0 20.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 1 1 8.3 6.5a1.78 1.78 0 0 1-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0 0 13 14.19a.66.66 0 0 0 0 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 0 1 2.7-1.4c1.55 0 3.36.87 3.36 3.66z" fill="currentColor" />
                   </svg>
                 </span>
                 <span className="btn__text">{t.hero_linkedin}</span>

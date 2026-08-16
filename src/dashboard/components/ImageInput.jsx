@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { Upload } from "lucide-react";
 
 const MAX_BYTES = 1.5 * 1024 * 1024; // ~1.5MB, keeps localStorage usage sane
 
@@ -35,7 +36,7 @@ export default function ImageInput({ label, value, onChange, hint }) {
           style={{ flex: 1, minWidth: 160 }}
         />
         <label className="fileBtn">
-          📤 Upload
+          <Upload size={14} aria-hidden="true" /> Upload
           <input ref={fileRef} type="file" accept="image/*" onChange={handleFile} />
         </label>
         {value && (

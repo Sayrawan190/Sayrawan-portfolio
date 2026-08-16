@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Pencil, X, Check } from "lucide-react";
 import { useLang } from "../context/LangContext";
 import { useT } from "../data/uiText";
 import { useData } from "../context/DataContext";
@@ -86,8 +87,8 @@ function CategoryBlock({ category, t, onUpdateCategory, onDeleteCategory, onAddS
             <span className="skillChipEdit" key={skill.id}>
               {skill.name.en || skill.name.ar}
               {skill.level ? ` · ${skill.level}` : ""}
-              <button type="button" onClick={() => setEditingSkillId(skill.id)} aria-label={t.dash_edit} title={t.dash_edit}>✎</button>
-              <button type="button" onClick={() => onDeleteSkill(skill.id)} aria-label={t.dash_delete} title={t.dash_delete}>✕</button>
+              <button type="button" onClick={() => setEditingSkillId(skill.id)} aria-label={t.dash_edit} title={t.dash_edit}><Pencil size={13} aria-hidden="true" /></button>
+              <button type="button" onClick={() => onDeleteSkill(skill.id)} aria-label={t.dash_delete} title={t.dash_delete}><X size={13} aria-hidden="true" /></button>
             </span>
           )
         )}
@@ -118,8 +119,8 @@ function SkillEditChip({ skill, t, onSave, onCancel }) {
       <input type="text" value={en} onChange={(e) => setEn(e.target.value)} style={{ width: 90, border: "none", background: "transparent", color: "inherit" }} />
       <input type="text" value={ar} dir="rtl" onChange={(e) => setAr(e.target.value)} style={{ width: 90, border: "none", background: "transparent", color: "inherit" }} />
       <input type="text" value={level} placeholder={t.dash_level} onChange={(e) => setLevel(e.target.value)} style={{ width: 70, border: "none", background: "transparent", color: "inherit" }} />
-      <button type="button" onClick={() => onSave({ name: { en, ar }, level })} title={t.dash_save}>✓</button>
-      <button type="button" onClick={onCancel} title={t.dash_cancel}>✕</button>
+      <button type="button" onClick={() => onSave({ name: { en, ar }, level })} title={t.dash_save}><Check size={13} aria-hidden="true" /></button>
+      <button type="button" onClick={onCancel} title={t.dash_cancel}><X size={13} aria-hidden="true" /></button>
     </span>
   );
 }

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Compass } from "lucide-react";
 import { useLang } from "../context/LangContext";
 import { useT } from "../data/uiText";
 import { useData } from "../context/DataContext";
@@ -128,7 +129,7 @@ export default function ExperienceEditor() {
           {experience.map((exp) => (
             <div className="dashRow" key={exp.id}>
               <div className="dashRow__main">
-                <div className="dashRow__icon">🧭</div>
+                <div className="dashRow__icon"><Compass size={18} aria-hidden="true" /></div>
                 <div className="dashRow__text">
                   <p className="dashRow__title">{L(exp.title, lang)}</p>
                   <p className="dashRow__sub">
